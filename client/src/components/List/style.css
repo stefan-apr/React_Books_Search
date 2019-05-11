@@ -44,3 +44,9 @@
 a {
   font-size: 12pt;
 }
+
+img {
+  height: 60px;
+  width: auto;
+  margin-right: 15px;
+}

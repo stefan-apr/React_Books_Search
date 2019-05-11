@@ -70,12 +70,12 @@ class Books extends Component {
     if(this.state.author !== null && this.state.title !== null) {  
       API.searchBooks(this.state.title, this.state.author)
         .then(function(res) {
-          console.log(res);
+          // console.log(res);
           if(res.data.totalItems === 0) {
             return;
           }
           for(let i = 0; i < res.data.items.length; i++) {
-            if(res.data.items[i].volumeInfo.authors !== undefined && res.data.items[i].volumeInfo.description !== undefined) {
+            if(res.data.items[i].volumeInfo.authors !== undefined && res.data.items[i].volumeInfo.description !== undefined && res.data.items[i].volumeInfo.imageLinks !== undefined) {
               bookSuggestions.push(res.data.items[i]);
             }
           }
@@ -92,12 +92,13 @@ class Books extends Component {
         title: this.state.title,
         author: this.state.author,
         synopsis: this.state.synopsis,
-        link: this.state.chosenBook.volumeInfo.infoLink
+        link: this.state.chosenBook.volumeInfo.infoLink,
+        thumb: this.state.chosenBook.volumeInfo.imageLinks.thumbnail
       })
         .then(res => this.loadBooks())
         .catch(err => console.log(err));
     }
-    console.log(this.state.synopsis);
+    // console.log(this.state.synopsis);
   };
 
   handlePick = function(book) {
@@ -137,6 +138,7 @@ class Books extends Component {
                 {this.state.incomingBooks.map(book => (
                   <div className="prediction-buttons" onClick={() => this.handlePick(book)} key={book.id} data-link={book.volumeInfo.infoLink}
                   data-title={book.volumeInfo.title} data-authors={book.volumeInfo.authors.toString()}>
+                  <img src={book.volumeInfo.imageLinks.thumbnail} alt="book-thumbnail"></img>
                   {book.volumeInfo.title + ", by "}
                   {book.volumeInfo.authors[0]}<br></br>  
                   <a href={book.volumeInfo.infoLink}>Google Play Store: {book.volumeInfo.infoLink}</a>
@@ -160,6 +162,7 @@ class Books extends Component {
                 {this.state.books.map(book => (
                   <ListItem key={book._id}>
                     <Link to={"/books/" + book._id}>
+                      <img src={book.thumb} alt="book-thumbnail"></img>
                       <strong>
                         {book.title} by {book.author}
                       </strong>
